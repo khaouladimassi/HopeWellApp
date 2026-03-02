@@ -1,9 +1,11 @@
 import QuoteScreen from '@/app/QuoteScreen';
 import StartScreen from '@/app/StartScreen';
 import WelcomeScreen from '@/app/WelcomeScreen';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 
 export default function Index() {
+  const router = useRouter();
   const [screen, setScreen] = useState<'welcome' | 'quote' | 'start'>('welcome');
 
   useEffect(() => {
@@ -24,6 +26,6 @@ export default function Index() {
   }, []);
 
   if (screen === 'quote') return <QuoteScreen />;
-  if (screen === 'start') return <StartScreen />;
+  if (screen === 'start') return <StartScreen onSignIn={() => router.push('/signin')} />;
   return <WelcomeScreen />;
 }

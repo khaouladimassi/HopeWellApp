@@ -4,15 +4,15 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 // ✅ Données des cœurs : position + taille + opacité
 const HEARTS = [
     { top: 40, left: 20, size: 150, opacity: 0.1 },
-    { top: 100, right: 10, size: 70, opacity: 0.1},
+    { top: 100, right: 10, size: 70, opacity: 0.1 },
     { top: 254, left: 40, size: 240, opacity: 0.1 },
     { top: 500, right: 20, size: 55, opacity: 0.1 },
     { top: 500, left: 30, size: 45, opacity: 0.1 },
-    { top: 650, left: 15, size: 50, opacity: 0.1},
-    { top: 720, right: 15, size: 152, opacity: 0.1},
+    { top: 650, left: 15, size: 50, opacity: 0.1 },
+    { top: 720, right: 15, size: 152, opacity: 0.1 },
 ];
 
-export default function Coucou() {
+export default function Coucou({ onSignIn }: { onSignIn?: () => void }) {
     return (
         <View style={styles.container}>
 
@@ -30,8 +30,8 @@ export default function Coucou() {
                         zIndex: 0,
                     }}
                 >
-                    
-                      ♥
+
+                    ♥
                 </Text>
             ))}
 
@@ -57,7 +57,9 @@ export default function Coucou() {
 
                 <Text style={styles.loginText}>
                     Vous avez déjà un compte ?{' '}
-                    <Text style={styles.loginLink}>Connectez-vous</Text>
+                    <Text style={styles.loginLink} onPress={onSignIn}>
+                        Connectez-vous
+                    </Text>
                 </Text>
             </View>
         </View>
