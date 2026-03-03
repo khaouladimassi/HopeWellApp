@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -12,11 +13,16 @@ const HEARTS = [
     { top: 720, right: 15, size: 152, opacity: 0.1 },
 ];
 
-export default function Coucou({ onSignIn }: { onSignIn?: () => void }) {
+interface CoucouProps {
+    onSignIn?: () => void;
+}
+
+export default function Coucou({ onSignIn }: CoucouProps) {
+    const navigation = useNavigation<any>(); // ← récupère navigation automatiquement
+
     return (
         <View style={styles.container}>
-
-            {/* ✅ Cœurs en arrière-plan */}
+            {/* Cœurs en arrière-plan */}
             {HEARTS.map((heart, index) => (
                 <Text
                     key={index}
@@ -30,12 +36,11 @@ export default function Coucou({ onSignIn }: { onSignIn?: () => void }) {
                         zIndex: 0,
                     }}
                 >
-
                     ♥
                 </Text>
             ))}
 
-            {/* ✅ Contenu par dessus les cœurs */}
+            {/* Contenu au-dessus */}
             <View style={styles.content}>
                 <Text style={styles.title}>Coucou !</Text>
                 <Text style={styles.subtitle}>J'espère que ta journée se passe bien.</Text>
@@ -51,7 +56,11 @@ export default function Coucou({ onSignIn }: { onSignIn?: () => void }) {
                     resizeMode="contain"
                 />
 
-                <TouchableOpacity style={styles.button}>
+                {/* Bouton "On commence →" avec navigation */}
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('MentalWellnessIntro1')}
+                >
                     <Text style={styles.buttonText}>On commence →</Text>
                 </TouchableOpacity>
 
@@ -76,7 +85,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 30,
-        zIndex: 1, // contenu au dessus des cœurs
+        zIndex: 1,
     },
     title: {
         fontSize: 28,
