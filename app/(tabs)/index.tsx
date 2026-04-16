@@ -1,5 +1,5 @@
 import QuoteScreen from '@/app/QuoteScreen';
-import StartScreen from '@/app/StartScreen';
+import StartScreen from '@/app/MentalWellnessIntro/StartScreen';
 import WelcomeScreen from '@/app/WelcomeScreen';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -26,6 +26,6 @@ export default function Index() {
   }, []);
 
   if (screen === 'quote') return <QuoteScreen />;
-  if (screen === 'start') return <StartScreen onSignIn={() => router.push('/signin')} />;
+  if (screen === 'start') return <StartScreen onSignIn={() => router.push('/')} />;
   return <WelcomeScreen />;
 }
