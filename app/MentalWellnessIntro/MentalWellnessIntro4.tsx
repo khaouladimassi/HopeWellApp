@@ -14,8 +14,8 @@ export default function MentalWellnessIntro4() {
                 <BottomCard
                     title={"Rejoignez une <highlight>communauté chaleureuse</highlight> et pleine de soutien."}
                     highlightColor="#B74A40"
-                    onNextPress={() => router.push('/Sante/Santescreen')}
-                    onSkipPress={() => router.push('/')}
+                    onNextPress={() => router.push('/onboarding')}
+                    onSkipPress={() => router.push('/onboarding')}
                 />
             </View>
         </View>

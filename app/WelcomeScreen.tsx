@@ -1,9 +1,20 @@
 // app/WelcomeScreen.tsx
-import React from 'react';
+import { useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.push('/QuoteScreen');
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
 

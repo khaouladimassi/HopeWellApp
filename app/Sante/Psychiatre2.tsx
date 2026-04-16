@@ -33,7 +33,7 @@ export default function Psychiatre2Screen() {
                 />
                 <CustomButton
                     title="NON"
-                    onPress={() => router.push('/')}
+                    onPress={() => router.push('/accompagnement/AccScreen')}
                 />
             </View>
         </View>
