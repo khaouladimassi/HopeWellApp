@@ -15,7 +15,7 @@ export default function MentalWellnessIntro3() {
                     title={"Profitez de <highlight>séances de thérapie</highlight> avec des spécialistes à l'écoute."}
                     highlightColor="#CDCDCD"
                     onNextPress={() => router.push('/MentalWellnessIntro/MentalWellnessIntro4')}
-                    onSkipPress={() => router.push('/')}
+                    onSkipPress={() => router.push('/onboarding')}
                 />
             </View>
         </View>

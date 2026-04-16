@@ -1,16 +1,12 @@
-// AntecedentsScreen2.tsx
 import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
-    Animated,
-    Keyboard,
     KeyboardAvoidingView,
-    PanResponder,
     Platform,
     ScrollView,
     StyleSheet,
     TextInput,
-    View
+    View,
 } from 'react-native';
 import BottomCardSimple from '../../components/BottomCardSimple';
 import CustomButton from '../../components/CustomButton';
@@ -18,150 +14,104 @@ import TopImage from '../../components/TopImage';
 
 export default function Psychiatre() {
     const router = useRouter();
-    const [text, setText] = useState('');
     const [showTextInput, setShowTextInput] = useState(false);
-    const [inputHeight, setInputHeight] = useState(50);
-    const [molecule, setMolecule] = useState('');
     const [dose, setDose] = useState('');
-    const [inputHeight2, setInputHeight2] = useState(50);
-
-
-
-    const translateY = useRef(new Animated.Value(0)).current;
-    const isFormFilled = dose.trim().length > 0;
-
-
-    // 🔥 Animation automatique avec clavier
-    useEffect(() => {
-        const showSub = Keyboard.addListener('keyboardDidShow', () => {
-            Animated.spring(translateY, {
-                toValue: -150,
-                useNativeDriver: true,
-            }).start();
-        });
-
-        const hideSub = Keyboard.addListener('keyboardDidHide', () => {
-            Animated.spring(translateY, {
-                toValue: 0,
-                useNativeDriver: true,
-            }).start();
-        });
-
-        return () => {
-            showSub.remove();
-            hideSub.remove();
-        };
-    }, []);
-
-    // 🔥 Drag manuel
-    const panResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderMove: (_, gestureState) => {
-                const newY = Math.max(gestureState.dy, -150);
-                if (newY <= 0) {
-                    translateY.setValue(newY);
-                }
-            },
-            onPanResponderRelease: (_, gestureState) => {
-                Animated.spring(translateY, {
-                    toValue: gestureState.dy < -100 ? -150 : 0,
-                    useNativeDriver: true,
-                }).start();
-            },
-        })
-    ).current;
-    const handleFocus = () => {
-        Animated.spring(translateY, {
-            toValue: -150, // décalage vers le haut
-            useNativeDriver: true,
-        }).start();
-    };
+    const [inputHeight, setInputHeight] = useState(50);
 
     return (
         <KeyboardAvoidingView
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-
-                {/* Image */}
+            <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps="handled"
+            >
+                {/* Top image */}
                 <TopImage source={require('../../assets/images/design2.png')} />
 
-                {/* Carte animée */}
-                <Animated.View
-                    style={{ transform: [{ translateY }] }}
-                    {...panResponder.panHandlers}
-                    pointerEvents="box-none"
+                {/* Card — no overflow:hidden so content won't be clipped */}
+                <BottomCardSimple
+                    title="Avez-vous été diagnostiqué(e) comme étant atteint d'une pathologie psychiatrique ?"
+                    style={styles.card}
                 >
-                    <BottomCardSimple
-                        title="Avez-vous été diagnostiqué(e) comme étant atteint d’une pathologie psychiatrique ?"
-                        style={{
-                            position: 'relative',
-                            marginTop: 300,
-                            bottom: 0,
-                            overflow: 'hidden',
-                            alignItems: 'center',
+                    <View style={styles.inner}>
 
+                        {/* OUI / NON buttons */}
+                        <View style={styles.buttonRow}>
+                            <CustomButton
+                                title="OUI"
+                                onPress={() => setShowTextInput(true)}
+                            />
+                            <CustomButton
+                                title="NON"
+                                onPress={() => router.push('/Sante/Psychiatre2')}
+                            />
+                        </View>
 
-                        }}
-                    >
-                        <View style={{ width: '100%' }}>
-
-
-                            <View style={styles.buttonContainer}>
-                                <CustomButton
-                                    title="OUI"
-                                    onPress={() => setShowTextInput(true)}
-                                />
-                                <CustomButton
-                                    title="NON"
-                                    onPress={() => router.push('/')}
-                                />
-                            </View>
-
-                            {showTextInput && (
+                        {/* Text input + Continuer — shown only after OUI */}
+                        {showTextInput && (
+                            <>
                                 <TextInput
-                                    style={[styles.textInput, { height: inputHeight2 }]}
-                                    placeholder="|"
+                                    style={[styles.textInput, { height: inputHeight }]}
+                                    placeholder="Décrivez votre pathologie…"
+                                    placeholderTextColor="#aaa"
                                     value={dose}
                                     onChangeText={setDose}
                                     multiline
-                                    onFocus={handleFocus} // 👈 fait glisser la carte
                                     onContentSizeChange={(e) =>
-                                        setInputHeight2(Math.max(50, e.nativeEvent.contentSize.height))
+                                        setInputHeight(Math.max(50, e.nativeEvent.contentSize.height))
                                     }
                                 />
-                            )}
 
-                            {/* Bouton continuer */}
-                            {isFormFilled && (
-                                <View style={styles.buttonContainer2}>
+                                <View style={styles.continuerRow}>
                                     <CustomButton
                                         title="Continuer"
                                         onPress={() => router.push('/Sante/Psychiatre2')}
                                     />
                                 </View>
-                            )}
-                        </View>
+                            </>
+                        )}
 
-
-
-
-                    </BottomCardSimple>
-
-                </Animated.View>
-
+                    </View>
+                </BottomCardSimple>
             </ScrollView>
         </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#ffffff' },
+    container: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+    },
+
+    /* Override card so it never clips children */
+    card: {
+        position: 'relative',
+        marginTop: 280,
+        bottom: 0,
+        overflow: 'visible',       // ← key fix: never clip children
+        alignItems: 'center',
+    },
+
+    inner: {
+        width: '100%',
+        alignItems: 'center',
+        paddingBottom: 40,
+    },
+
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 16,
+        marginTop: -100,           // pull buttons up under the title
+        marginBottom: 20,
+    },
 
     textInput: {
-        marginHorizontal: -40,
+        width: '100%',
         backgroundColor: '#fff',
         borderRadius: 20,
         padding: 17,
@@ -174,17 +124,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 2,
-        marginBottom: 45,
-        top: 30,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 16,
-        marginTop: -120,
-        alignItems: 'center'
+        marginBottom: 20,
     },
 
-    buttonContainer2: { marginTop: 20, alignItems: 'center' },
-
+    continuerRow: {
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 20,
+    },
 });

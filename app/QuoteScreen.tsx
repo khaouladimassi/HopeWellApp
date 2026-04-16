@@ -1,9 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import { useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function QuoteScreen() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.push('/MentalWellnessIntro/StartScreen');
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
 
         <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>

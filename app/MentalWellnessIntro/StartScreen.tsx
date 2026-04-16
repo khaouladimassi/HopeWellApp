@@ -65,7 +65,7 @@ export default function Coucou({ onSignIn }: CoucouProps) {
 
                 <Text style={styles.loginText}>
                     Vous avez déjà un compte ?{' '}
-                    <Text style={styles.loginLink} onPress={onSignIn}>
+                    <Text style={styles.loginLink} onPress={() => router.push('/compte')}>
                         Connectez-vous
                     </Text>
                 </Text>
